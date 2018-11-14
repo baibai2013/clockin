@@ -100,7 +100,7 @@ class ClockService : Service() {
                 dida()
             }
         }
-        timer.schedule(timerTask, 0, 30 * 1000)
+        timer.schedule(timerTask, 0, 20 * 1000)
     }
 
     private fun dida() {
