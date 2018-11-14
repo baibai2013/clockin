@@ -272,20 +272,26 @@ class ClockService : Service() {
         var startAM = Calendar.getInstance()
         startAM.set(Calendar.HOUR_OF_DAY, 9)
         startAM.set(Calendar.MINUTE, 0)
+        startAM.set(Calendar.SECOND,0)
 
         var endAM = Calendar.getInstance()
         endAM.set(Calendar.HOUR_OF_DAY, 9)
         endAM.set(Calendar.MINUTE, 40)
+        endAM.set(Calendar.SECOND, 0)
 
         var startPM = Calendar.getInstance()
         startPM.set(Calendar.HOUR_OF_DAY, 19)
         startPM.set(Calendar.MINUTE, 30)
+        startPM.set(Calendar.SECOND,0)
 
         var endPM = Calendar.getInstance()
         endPM.set(Calendar.HOUR_OF_DAY, 21)
         endPM.set(Calendar.MINUTE, 30)
+        endPM.set(Calendar.SECOND, 0)
 
         var time24 = 1000 * 60 * 60 * 24
+
+
 
         var hour = calender.get(Calendar.HOUR_OF_DAY)
         if (hour >= 12) {
