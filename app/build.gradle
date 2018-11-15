@@ -9,11 +9,12 @@ android {
     buildToolsVersion "28.0.3"
     defaultConfig {
         applicationId "cn.babyfs.android.clockin"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -41,4 +42,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
     implementation 'com.alibaba:fastjson:1.2.51'
     implementation 'org.apache.commons:commons-lang3:3.8.1'
+    implementation 'com.android.support:multidex:1.0.1'
+    implementation 'com.innoventsolutions.birt.runtime:org.apache.commons.codec_1.9.0.v20170208-1614:4.8.0'
 }
