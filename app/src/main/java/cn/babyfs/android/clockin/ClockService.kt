@@ -40,6 +40,36 @@ class ClockService : Service() {
             var sp = context?.getSharedPreferences(fineName, Context.MODE_PRIVATE)
             return sp?.getLong("time", 0)
         }
+
+        fun saveAMTme(context: Context?,amTime:String){
+            var editer = context?.getSharedPreferences(fineName, Context.MODE_PRIVATE)?.edit()
+            editer = editer?.putString("amtime", amTime)
+            editer?.apply()
+        }
+        fun getAMTme(context: Context?): String? {
+            var sp = context?.getSharedPreferences(fineName, Context.MODE_PRIVATE)
+            return sp?.getString("amtime","08:20-09:40")
+        }
+
+        fun savePMTme(context: Context?,amTime:String){
+            var editer = context?.getSharedPreferences(fineName, Context.MODE_PRIVATE)?.edit()
+            editer = editer?.putString("pmtime", amTime)
+            editer?.apply()
+        }
+        fun getPMTme(context: Context?): String? {
+            var sp = context?.getSharedPreferences(fineName, Context.MODE_PRIVATE)
+            return sp?.getString("pmtime","19:20-21:00")
+        }
+
+        fun saveNumber(context: Context?,number:String){
+            var editer = context?.getSharedPreferences(fineName, Context.MODE_PRIVATE)?.edit()
+            editer = editer?.putString("number", number)
+            editer?.apply()
+        }
+        fun getNumber(context: Context?): String? {
+            var sp = context?.getSharedPreferences(fineName, Context.MODE_PRIVATE)
+            return sp?.getString("number","18210175071")
+        }
     }
 
 
@@ -80,7 +110,7 @@ class ClockService : Service() {
         builder.setContentText(contentText)
 
         notification = builder
-                .setContentTitle(getResources().getString(R.string.app_name))
+                .setContentTitle("打卡精灵")
                 .setContentText(contentText)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(smallIcon)

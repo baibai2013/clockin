@@ -165,7 +165,9 @@ class ClockInService : IntentService("ClockInService") {
 
         val image = imgarr[Random().nextInt(imgarr.size)]
 
-        var content = "#### 打卡时间: \n" +
+        val phone = ClockService.getNumber(this)
+        var content = "@$phone: \n" +
+                "#### 打卡时间: \n" +
                 "$currentTime\n" +
                 "#### 下次打卡时间: \n" +
                 "$nextClockInTime\n" +
