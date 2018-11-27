@@ -42,6 +42,8 @@ class MainActivity : AppCompatActivity() {
         pmEndTime.text = pmTimeArr?.get(1)
 
         phoneNumber.text = phone
+
+        clockInTime.text = ClockService.CeshiFmt.format(ClockService.getClockInTime(this))
     }
 
     private fun setting(){

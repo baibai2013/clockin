@@ -154,7 +154,7 @@
     android:layout_marginTop="20dp"
     android:text="下次打卡时间:"
     app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/line2"
+    app:layout_constraintTop_toBottomOf="@+id/phoneNumber"
     />
 
   <TextView
@@ -164,7 +164,7 @@
     android:background="#e2e2e2"
     android:gravity="center"
     android:text="2018-12-3 12:12:22 星期1"
-    app:layout_constraintTop_toBottomOf="@id/phoneTitle"
+    app:layout_constraintTop_toBottomOf="@id/clockInTitle"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
     android:layout_marginLeft="20dp"

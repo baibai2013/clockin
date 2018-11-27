@@ -135,16 +135,16 @@ class ClockService : Service() {
 
     private fun dida() {
         val calender = Calendar.getInstance()
-        var time = CeshiFmt.format(calender.time)
-        Log.d(TAG, "当前时间：$time--星期${calender.get(Calendar.DAY_OF_WEEK) - 1}")
+        var currentTime = CeshiFmt.format(calender.time)
+        Log.d(TAG, "当前时间：$currentTime--星期${calender.get(Calendar.DAY_OF_WEEK) - 1}")
         if (calender.get(Calendar.DAY_OF_WEEK) in arrayListOf(2, 3, 4, 5, 6)) {
-            var time = getClockInTime(this)
-            if (time == 0L) {
-                time = calender.timeInMillis + 1000 * 10
-                saveClockInTime(this, time)
+            var clockIntime = getClockInTime(this)
+            if (clockIntime == 0L) {
+                clockIntime = calender.timeInMillis + 1000 * 10
+                saveClockInTime(this, clockIntime)
             }
 
-            var clockInTimeFormated = CeshiFmt2.format(time?.let { Date(it) })
+            var clockInTimeFormated = CeshiFmt2.format(clockIntime?.let { Date(it) })
             var currentTimeFormated = CeshiFmt2.format(calender.time)
 
             Log.d(TAG, "打卡时间：$clockInTimeFormated")
@@ -153,8 +153,8 @@ class ClockService : Service() {
             if (currentTimeFormated == clockInTimeFormated) {
 
                 Log.d(TAG, "clockin----")
-                time = randonNextTime()
-                saveClockInTime(this, time)
+                var newClocinIntTime = randonNextTime()
+                saveClockInTime(this, newClocinIntTime)
 
                 var timer = Timer()
 
@@ -227,7 +227,7 @@ class ClockService : Service() {
 
                 var timerTask7 = object : TimerTask() {
                     override fun run() {
-                        senddingding()
+                        senddingding(newClocinIntTime)
                         cancel()
                     }
                 }
@@ -269,9 +269,10 @@ class ClockService : Service() {
         this?.startService(intent)
     }
 
-    fun senddingding() {
+    fun senddingding(nextTime:Long) {
         var intent = Intent(this, ClockInService::class.java)
         intent.action = ClockInService.ACTION_SEND_DINGDING
+        intent.putExtra("nextTime",nextTime)
         this?.startService(intent)
     }
 
