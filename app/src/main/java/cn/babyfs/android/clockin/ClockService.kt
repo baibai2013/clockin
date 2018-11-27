@@ -40,6 +40,36 @@ class ClockService : Service() {
             var sp = context?.getSharedPreferences(fineName, Context.MODE_PRIVATE)
             return sp?.getLong("time", 0)
         }
+
+        fun saveAMTme(context: Context?,amTime:String){
+            var editer = context?.getSharedPreferences(fineName, Context.MODE_PRIVATE)?.edit()
+            editer = editer?.putString("amtime", amTime)
+            editer?.apply()
+        }
+        fun getAMTme(context: Context?): String? {
+            var sp = context?.getSharedPreferences(fineName, Context.MODE_PRIVATE)
+            return sp?.getString("amtime","08:20-09:40")
+        }
+
+        fun savePMTme(context: Context?,amTime:String){
+            var editer = context?.getSharedPreferences(fineName, Context.MODE_PRIVATE)?.edit()
+            editer = editer?.putString("pmtime", amTime)
+            editer?.apply()
+        }
+        fun getPMTme(context: Context?): String? {
+            var sp = context?.getSharedPreferences(fineName, Context.MODE_PRIVATE)
+            return sp?.getString("pmtime","19:20-21:00")
+        }
+
+        fun saveNumber(context: Context?,number:String){
+            var editer = context?.getSharedPreferences(fineName, Context.MODE_PRIVATE)?.edit()
+            editer = editer?.putString("number", number)
+            editer?.apply()
+        }
+        fun getNumber(context: Context?): String? {
+            var sp = context?.getSharedPreferences(fineName, Context.MODE_PRIVATE)
+            return sp?.getString("number","18210175071")
+        }
     }
 
 
@@ -80,7 +110,7 @@ class ClockService : Service() {
         builder.setContentText(contentText)
 
         notification = builder
-                .setContentTitle(getResources().getString(R.string.app_name))
+                .setContentTitle("打卡精灵")
                 .setContentText(contentText)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(smallIcon)
@@ -105,16 +135,16 @@ class ClockService : Service() {
 
     private fun dida() {
         val calender = Calendar.getInstance()
-        var time = CeshiFmt.format(calender.time)
-        Log.d(TAG, "当前时间：$time--星期${calender.get(Calendar.DAY_OF_WEEK) - 1}")
+        var currentTime = CeshiFmt.format(calender.time)
+        Log.d(TAG, "当前时间：$currentTime--星期${calender.get(Calendar.DAY_OF_WEEK) - 1}")
         if (calender.get(Calendar.DAY_OF_WEEK) in arrayListOf(2, 3, 4, 5, 6)) {
-            var time = getClockInTime(this)
-            if (time == 0L) {
-                time = calender.timeInMillis + 1000 * 10
-                saveClockInTime(this, time)
+            var clockIntime = getClockInTime(this)
+            if (clockIntime == 0L) {
+                clockIntime = calender.timeInMillis + 1000 * 10
+                saveClockInTime(this, clockIntime)
             }
 
-            var clockInTimeFormated = CeshiFmt2.format(time?.let { Date(it) })
+            var clockInTimeFormated = CeshiFmt2.format(clockIntime?.let { Date(it) })
             var currentTimeFormated = CeshiFmt2.format(calender.time)
 
             Log.d(TAG, "打卡时间：$clockInTimeFormated")
@@ -123,8 +153,8 @@ class ClockService : Service() {
             if (currentTimeFormated == clockInTimeFormated) {
 
                 Log.d(TAG, "clockin----")
-                time = randonNextTime()
-                saveClockInTime(this, time)
+                var newClocinIntTime = randonNextTime()
+                saveClockInTime(this, newClocinIntTime)
 
                 var timer = Timer()
 
@@ -197,7 +227,7 @@ class ClockService : Service() {
 
                 var timerTask7 = object : TimerTask() {
                     override fun run() {
-                        senddingding()
+                        senddingding(newClocinIntTime)
                         cancel()
                     }
                 }
@@ -239,9 +269,10 @@ class ClockService : Service() {
         this?.startService(intent)
     }
 
-    fun senddingding() {
+    fun senddingding(nextTime:Long) {
         var intent = Intent(this, ClockInService::class.java)
         intent.action = ClockInService.ACTION_SEND_DINGDING
+        intent.putExtra("nextTime",nextTime)
         this?.startService(intent)
     }
 

@@ -17,8 +17,6 @@ import java.io.*
 import java.util.*
 
 
-
-
 class ClockInService : IntentService("ClockInService") {
 
     companion object {
@@ -88,7 +86,7 @@ class ClockInService : IntentService("ClockInService") {
                 startActivity(intent)
                 Log.d(TAG, ACTION_OPEN_APP)
             }
-            ACTION_CLOSE_APP->{
+            ACTION_CLOSE_APP -> {
                 var process = Runtime.getRuntime().exec("su")
                 var os = DataOutputStream(process.getOutputStream())
                 var cmd = "/system/bin/input keyevent 4\n"
@@ -98,9 +96,11 @@ class ClockInService : IntentService("ClockInService") {
                 os.close()
                 process.waitFor()
 
-                Log.d(TAG,"$ACTION_CLOSE_APP")
+                Log.d(TAG, "$ACTION_CLOSE_APP")
             }
-            ACTION_WAKE_UP->{
+
+
+            ACTION_WAKE_UP -> {
                 var process = Runtime.getRuntime().exec("su")
                 var os = DataOutputStream(process.getOutputStream())
                 var cmd = "/system/bin/input keyevent 26\n"
@@ -110,10 +110,10 @@ class ClockInService : IntentService("ClockInService") {
                 os.close()
                 process.waitFor()
 
-                Log.d(TAG,"$ACTION_WAKE_UP")
+                Log.d(TAG, "$ACTION_WAKE_UP")
             }
 
-            ACTION_UN_LOCK->{
+            ACTION_UN_LOCK -> {
                 var process = Runtime.getRuntime().exec("su")
                 var os = DataOutputStream(process.getOutputStream())
                 var cmd = "/system/bin/input swipe 351 1016 351 500\n"
@@ -123,24 +123,26 @@ class ClockInService : IntentService("ClockInService") {
                 os.close()
                 process.waitFor()
 
-                Log.d(TAG,"$ACTION_UN_LOCK")
+                Log.d(TAG, "$ACTION_UN_LOCK")
             }
 
-            ACTION_SEND_DINGDING->{
-               sendDingDing()
-                Log.d(TAG,"${ACTION_SEND_DINGDING} ")
+            ACTION_SEND_DINGDING -> {
+                val time = intent.getLongExtra("nextTime", 0)
+                sendDingDing(time)
+                Log.d(TAG, "${ACTION_SEND_DINGDING} ")
             }
+
 
         }
 
 
     }
 
-    private fun sendDingDing() {
+    private fun sendDingDing(nextTime: Long) {
         val hookweb = "https://oapi.dingtalk.com/robot/send?access_token=a96ea0f7a8428d9ac8f9de4db5e8839a65d6bcdedcb0c4d544cbc542b54803ee"
         val currentTime = ClockService.CeshiFmt.format(Date())
-        val nextClockInTime =  ClockService.CeshiFmt.format(ClockService.getClockInTime(this)?.let { Date(it) })
-
+        val nextClockInTime = ClockService.CeshiFmt.format(nextTime)
+        Log.d(TAG, "${ACTION_SEND_DINGDING} $nextClockInTime")
         val imgarr = arrayListOf("http://t2.hddhhn.com/uploads/tu/201601/210/wi3xipqk20z.jpg",
                 "http://t2.hddhhn.com/uploads/tu/201601/210/e2h0nh4j4x0.jpg",
                 "http://t2.hddhhn.com/uploads/tu/201601/210/yvbtnjctm1x.jpg",
@@ -165,7 +167,9 @@ class ClockInService : IntentService("ClockInService") {
 
         val image = imgarr[Random().nextInt(imgarr.size)]
 
-        var content = "#### 打卡时间: \n" +
+        val phone = ClockService.getNumber(this)
+        var content = "@$phone: \n" +
+                "#### 打卡时间: \n" +
                 "$currentTime\n" +
                 "#### 下次打卡时间: \n" +
                 "$nextClockInTime\n" +
@@ -174,8 +178,8 @@ class ClockInService : IntentService("ClockInService") {
         msg.title = "今日打卡"
         msg.add(content)
         var client = DingDingChatBotClient()
-        var result = client.send(hookweb,msg)
-        Log.d(TAG,"${ACTION_SEND_DINGDING} $result")
+        var result = client.send(hookweb, msg)
+        Log.d(TAG, "${ACTION_SEND_DINGDING} $result")
     }
 
 

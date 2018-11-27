@@ -15,12 +15,45 @@ class MainActivity : AppCompatActivity() {
         startService(Intent(this, ClockService::class.java))
 
 
-        clockIn.setOnClickListener {
-            var intent = Intent(this, ClockInService::class.java)
-            intent.action = ClockInService.ACTION_SEND_DINGDING
-            this?.startService(intent)
+        settingBtn.setOnClickListener {
+//            var intent = Intent(this, ClockInService::class.java)
+//            intent.action = ClockInService.ACTION_SEND_DINGDING
+//            this?.startService(intent)
+            setting()
         }
+
+
+
+        initData()
     }
 
+
+    fun initData(){
+        var amTime = ClockService.getAMTme(this)
+        var pmTime = ClockService.getPMTme(this)
+        var phone = ClockService.getNumber(this)
+
+        var amTimeArr = amTime?.split("-")
+        amStartTime.text = amTimeArr?.get(0)
+        amEndTime.text = amTimeArr?.get(1)
+
+        var pmTimeArr = pmTime?.split("-")
+        pmStartTime.text = pmTimeArr?.get(0)
+        pmEndTime.text = pmTimeArr?.get(1)
+
+        phoneNumber.text = phone
+
+        clockInTime.text = ClockService.CeshiFmt.format(ClockService.getClockInTime(this))
+    }
+
+    private fun setting(){
+
+        var amTime = "${amStartTime.text}-${amEndTime.text}"
+        var pmTime = "${pmStartTime.text}-${pmEndTime.text}"
+        var phone = "${phoneNumber.text}"
+        ClockService.saveAMTme(this,amTime)
+        ClockService.savePMTme(this,pmTime)
+        ClockService.saveNumber(this,phone)
+    }
 
 }

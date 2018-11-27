@@ -24,6 +24,7 @@ android {
     }
 
 
+
 }
 
 dependencies {
@@ -41,4 +42,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
     implementation 'com.alibaba:fastjson:1.2.51'
     implementation 'org.apache.commons:commons-lang3:3.8.1'
+    implementation 'com.contrarywind:Android-PickerView:3.2.7'
 }
